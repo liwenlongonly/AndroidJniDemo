@@ -8,7 +8,7 @@
 
 NS_IL_BEGIN
 
-NativeStudent::NativeStudent():mName(""),mGrade(0) {
+NativeStudent::NativeStudent():mName(""),mGrade(0),mJavaObj(0) {
 
 }
 

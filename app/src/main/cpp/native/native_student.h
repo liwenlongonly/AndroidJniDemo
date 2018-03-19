@@ -25,6 +25,7 @@ public:
 
     std::string Print();
 
+    long mJavaObj;
 private:
     std::string mName;
     int mGrade;

@@ -26,6 +26,8 @@ NativeStudent * GetNativeStudentFromObj(JNIEnv *env, jobject obj){
 
 jlong CreateStudent(JNIEnv *env, jobject obj){
     NativeStudent *student = new(std::nothrow) NativeStudent();
+    jobject gThiz = (jobject)env->NewGlobalRef(obj);//thiz为JAVA对象
+    student->mJavaObj = (jint)gThiz; //c++对象存储java引用
     if(student){
         return (jlong)student;
     }else{
@@ -35,6 +37,7 @@ jlong CreateStudent(JNIEnv *env, jobject obj){
 
 void DestoryStudent(JNIEnv *env, jobject obj, jlong nativeStudent){
     NativeStudent *student = (NativeStudent*)nativeStudent;
+    env->DeleteGlobalRef((jobject)student->mJavaObj); //销毁创建的引用
     IL_SAFE_DELETE(student);
 }
 
