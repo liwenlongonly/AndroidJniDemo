@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Test
         Student student = new Student();
         student.setName("ilong");
         Log.d(TAG, "name: "+student.getName());
