@@ -33,6 +33,7 @@ jlong CreateStudent(JNIEnv *env, jobject obj){
     }else{
         LOGE("new NativeStudent object error.");
     }
+    return -1;
 }
 
 void DestoryStudent(JNIEnv *env, jobject obj, jlong nativeStudent){

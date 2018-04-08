@@ -11,7 +11,7 @@
 #endif // WIN32
 #include <sstream>
 
-VHALL_LogLevel vhall_log_level = VHALL_LOGALL;
+LogLevel log_level = LOGALL;
 
 std::string GetFormatDate(){
     const int buff_len = 255;
