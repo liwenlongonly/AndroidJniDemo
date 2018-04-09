@@ -21,6 +21,8 @@ void  SetName(JNIEnv *, jobject, jstring);
 
 jstring  GetName(JNIEnv *, jobject);
 
+void  AsynGetName(JNIEnv *, jobject, jobject);
+
 void  SetGrade(JNIEnv *, jobject, jint);
 
 jint  GetGrade(JNIEnv *, jobject);
@@ -36,6 +38,7 @@ static JNINativeMethod StudentMethods[] = {
         { "DestoryStudent",               "(J)V",                      (void*)DestoryStudent, },
         { "SetName",                      "(Ljava/lang/String;)V",     (void*)SetName, },
         { "GetName",                      "()Ljava/lang/String;",      (void*)GetName, },
+        { "AsynGetName",                  "(Ljava/lang/Object;)V",     (void*)AsynGetName, },
         { "SetGrade",                     "(I)V",                      (void*)SetGrade, },
         { "GetGrade",                     "()I",                       (void*)GetGrade, },
         { "Print",                        "()Ljava/lang/String;",      (void*)Print, },

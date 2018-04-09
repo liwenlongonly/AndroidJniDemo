@@ -6,55 +6,72 @@ package com.ilong.jnidemo;
 
 public class Student {
 
-   private long mNativeStudent = -1;
-   private final String TAG = "Student";
-   public Student(){
-      mNativeStudent = CreateStudent();
-   }
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
 
-   public void setName(String name){
-       SetName(name);
-   }
+    public interface Callback{
+        public void onResponse(String resp);
+    }
 
-   public String getName(){
-      return GetName();
-   }
+    private long mNativeStudent = -1;
 
-   public void setGrade(int grade){
-      SetGrade(grade);
-   }
+    private final String TAG = "Student";
 
-   public int getGrade(){
-      return GetGrade();
-   }
+    public Student() {
+        mNativeStudent = CreateStudent();
+    }
 
-   public String print(){
-      return Print();
-   }
+    public void setName(String name) {
+        SetName(name);
+    }
 
-   public static String printClassName(){
-      return PrintClassName();
-   }
+    public String getName() {
+        return GetName();
+    }
 
-   @Override
-   protected void finalize() throws Throwable {
-      DestoryStudent(mNativeStudent);
-      super.finalize();
-   }
+    public void asynGetName(Callback callback){
+        AsynGetName(callback);
+    }
 
-   private native long CreateStudent();
+    public void setGrade(int grade) {
+        SetGrade(grade);
+    }
 
-   private native void DestoryStudent(long nativeStuent);
+    public int getGrade() {
+        return GetGrade();
+    }
 
-   private native void SetName(String name);
+    public String print() {
+        return Print();
+    }
 
-   private native String GetName();
+    public static String printClassName() {
+        return PrintClassName();
+    }
 
-   private native void SetGrade(int grade);
+    @Override
+    protected void finalize() throws Throwable {
+        DestoryStudent(mNativeStudent);
+        super.finalize();
+    }
 
-   private native int GetGrade();
+    private native long CreateStudent();
 
-   private native String Print();
+    private native void DestoryStudent(long nativeStuent);
 
-   private static native String PrintClassName();
+    private native void SetName(String name);
+
+    private native String GetName();
+
+    private native void AsynGetName(Object callback);
+
+    private native void SetGrade(int grade);
+
+    private native int GetGrade();
+
+    private native String Print();
+
+    private static native String PrintClassName();
 }

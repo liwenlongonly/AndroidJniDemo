@@ -6,8 +6,12 @@
 #include "native/native_define.h"
 #include "native/native_student.h"
 #include "java_string.h"
+#include <async_task_pool.h>
 
 USING_NS_IL;
+
+#define CALLBACK_METHOD_NAME           "onResponse"
+#define CALLBACK_METHOD_PARAM          "(Ljava/lang/String;)V"
 
 NativeStudent * GetNativeStudentFromObj(JNIEnv *env, jobject obj){
     jclass objClazz = (jclass)env->GetObjectClass(obj);//obj为对应的JAVA对象
@@ -27,11 +31,11 @@ NativeStudent * GetNativeStudentFromObj(JNIEnv *env, jobject obj){
 jlong CreateStudent(JNIEnv *env, jobject obj){
     NativeStudent *student = new(std::nothrow) NativeStudent();
     jobject gThiz = (jobject)env->NewGlobalRef(obj);//thiz为JAVA对象
-    student->mJavaObj = (jint)gThiz; //c++对象存储java引用
     if(student){
+        student->mJavaObj = (jint)gThiz; //c++对象存储java引用
         return (jlong)student;
     }else{
-        LOGE("new NativeStudent object error.");
+        LOGE("new NativeStudent object is null.");
     }
     return -1;
 }
@@ -62,6 +66,44 @@ jstring GetName(JNIEnv *env, jobject obj){
         LOGE("GetNativeStudentFromObj(env,obj) return null.");
     }
     return env->NewStringUTF("");
+}
+
+void AsynGetName(JNIEnv *env, jobject obj, jobject callback){
+    NativeStudent *student = GetNativeStudentFromObj(env,obj);
+    if(student){
+        jclass clazz = env->GetObjectClass(callback);
+        if (clazz == NULL) {
+            LOGE("env->GetObjectClass return NULL!");
+            return ;
+        }
+        jmethodID callbackMethod = env->GetMethodID(clazz, CALLBACK_METHOD_NAME, CALLBACK_METHOD_PARAM);
+        if (callbackMethod == NULL) {
+            LOGE("env->GetMethodID return NULL!");
+            return ;
+        }
+        JavaVM *jvm = NULL;
+        env->GetJavaVM(&jvm);
+        if (jvm == NULL) {
+            LOGE("jvm is NULL!");
+            return ;
+        }
+        jobject objcb = env->NewGlobalRef(callback);
+        AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO,[jvm,callbackMethod,objcb,student]()->void{
+            //TODO Child Thread
+            JNIEnv *env_ = NULL ;
+            if (jvm->AttachCurrentThread(&env_, NULL) != JNI_OK) {
+                LOGE("AttachCurrentThread return NULL!");
+                return ;
+            }
+            jstring str = env_->NewStringUTF(student->GetName().c_str());
+            env_->CallVoidMethod(objcb, callbackMethod, str);
+            env_->DeleteGlobalRef(objcb);
+            if (jvm->DetachCurrentThread() != JNI_OK) {
+                LOGE("DetachCurrentThread is not ok.");
+                return ;
+            }
+        });
+    }
 }
 
 void SetGrade(JNIEnv *env, jobject obj, jint grade){

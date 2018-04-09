@@ -7,11 +7,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
-
     private final String TAG = "MainActivity";
 
     @Override
@@ -24,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "name: "+student.getName());
         student.setGrade(101);
         Log.d(TAG, "grade: "+student.getGrade());
+        student.asynGetName(new Student.Callback() {
+            @Override
+            public void onResponse(String resp) {
+                Log.d(TAG, "asynGetName: "+resp);
+            }
+        });
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(Student.printClassName()+" "+student.print());

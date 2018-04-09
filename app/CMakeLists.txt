@@ -13,6 +13,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 # Specifies a path to native header files.
 include_directories(src/main/cpp/)
+include_directories(${PROJECT_SOURCE_DIR}/../async_task_pool/src/)
 
 file(GLOB native_srcs "src/main/cpp/jni/*.cpp" "src/main/cpp/native/*.cpp" )
 
