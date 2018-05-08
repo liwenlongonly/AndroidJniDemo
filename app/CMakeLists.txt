@@ -3,7 +3,7 @@
 
 # Sets the minimum version of CMake required to build the native library.
 
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.0.0)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -26,7 +26,7 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              ${native_srcs} )
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/../async_task_pool/src ${PROJECT_SOURCE_DIR}/build )
+add_subdirectory(${PROJECT_SOURCE_DIR}/../async_task_pool ${PROJECT_SOURCE_DIR}/build )
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by

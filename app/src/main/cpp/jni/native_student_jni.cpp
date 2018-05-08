@@ -32,7 +32,7 @@ jlong CreateStudent(JNIEnv *env, jobject obj){
     NativeStudent *student = new(std::nothrow) NativeStudent();
     jobject gThiz = (jobject)env->NewGlobalRef(obj);//thiz为JAVA对象
     if(student){
-        student->mJavaObj = (jint)gThiz; //c++对象存储java引用
+        student->mJavaObj = (long)gThiz; //c++对象存储java引用
         return (jlong)student;
     }else{
         LOGE("new NativeStudent object is null.");
